@@ -32,6 +32,11 @@ for i in range(2, 1632):
 # 	print(data[0])
 
 
+
+
+
+
+
 result = {}
 result[0] = [15.2, 26.2, 30.1, 23.3] #moderaterna
 result[1] = [13.4, 7.5, 7.1, 5.4] #liberaler
@@ -62,7 +67,6 @@ companies = {}
 for x in data[2]:
 	if x not in companies:
 		companies[x] = len(companies)
-
 # print(len(companies))
 # print(companies)
 xven = []
@@ -224,17 +228,20 @@ from keras.models import Sequential
 from keras.layers import Dense
 from sklearn.preprocessing import normalize
 
-xnorm = normalize(x, axis=1, norm='l1')
-ynorm = normalize(np.transpose(y), axis=1, norm='l1')
+# xnorm = normalize(x, axis=1, norm='l1')
+# ynorm = normalize(np.transpose(y), axis=1, norm='l1')
+
+xnorm = x
+ynorm = np.transpose(y)
 
 model = Sequential()
-model.add(Dense(43, input_dim=43, activation='sigmoid'))
-model.add(Dense(44, activation='sigmoid'))
+model.add(Dense(86, input_dim=43, activation='tanh'))
+model.add(Dense(60, activation='tanh'))
 model.add(Dense(9, activation='linear'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
-model.fit(xnorm, ynorm, epochs=500, batch_size=50)
-
+model.fit(xnorm, ynorm, epochs=650, batch_size=50)
+model.save('modelpred.h5')
 scores = model.evaluate(xnorm, ynorm)
 print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 # row1 = sheet.row(3)
@@ -243,3 +250,38 @@ print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 # if cell_type_str == "":
 # 	print("banan")4,0
 # print(type(cell_type_str))
+
+
+xtest = []
+xtest.append(0.5)
+if str(data[3][1]) != "":
+	xtest.append(float(str(data[3][1]).replace(",", ".")))
+else:
+	xtest.append(0.0)
+if str(data[4][1]) != "":
+	xtest.append(float(str(data[4][1]).replace(",", ".")))
+else:
+	xtest.append(0.0)
+if str(data[5][1]) != "":
+	xtest.append(float(str(data[5][1]).replace(",", ".")))
+else:
+	xtest.append(0.0)
+if str(data[6][1]) != "":
+	xtest.append(float(str(data[6][1]).replace(",", ".")))
+else:
+	xtest.append(0.0)
+if str(data[7][1]) != "":
+	xtest.append(float(str(data[7][1]).replace(",", ".")))
+else:
+	xtest.append(0.0)
+if str(data[8][1]) != "":
+	xtest.append(float(str(data[8][1]).replace(",", ".")))
+else:
+	xtest.append(0.0)
+if str(data[9][1]) != "":
+	xtest.append(float(str(data[9][1]).replace(",", ".")))
+else:
+	xtest.append(0.0)	# xven[i].append(float(str(data[3][i]).replace(",", ".")))	# xven[i].append(float(str(data[4][i]).replace(",", ".")))	# xven[i].append(float(str(data[5][i]).replace(",", ".")))	# xven[i].append(float(str(data[6][i]).replace(",", ".")))	# xven[i].append(float(str(data[7][i]).replace(",", ".")))	# xven[i].append(float(str(data[8][i]).replace(",", ".")))	# xven[i].append(float(str(data[9][i]).replace(",", ".")))if str(data[10][1]) != "":	xtest.append(float(str(data[10][1]).replace(",", ".")))else:	xtest.append(0.0)if str(data[11][1]) != "":	xtest.append(float(str(data[11][1]).replace(",", ".")))else:	xtest.append(0.0)if (data[15][1] != ""):	xtest.append(float(data[15][1]))else:	xtest.append(0.0)index = len(xtest)for j in range(0, 32):	#print(data[2][i] + " : " + str(companies.get(data[2][i])))		if j == companies[data[2][1]]:				xtest.append(1)		else:			xtest.append(0)
+
+
+
