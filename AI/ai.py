@@ -120,8 +120,11 @@ for i in range(0, len(data[3])):
 		xven[i].append(0.0)
 	index = len(xven)
 	for j in range(0, 32):
-		if j == companies.get(data[0][i]):
+		#print(data[2][i] + " : " + str(companies.get(data[2][i])))
+		if j == companies[data[2][i]]:
+
 			xven[i].append(1)
+
 		else:
 			xven[i].append(0)
 
@@ -203,19 +206,36 @@ print(len(X))
 print(len(X[1]))
 print(len(y))
 print(len(y[1]))
+np.set_printoptions(threshold=np.nan)
+
+# for h in xven:
+# 	for t in h:
+# 		print(str(t), end=" ")
+
+# 	print("")
+
+# for h in x:
+# 	print(h)
+
+# for h in np.transpose(y):
+# 	print(h)
 
 from keras.models import Sequential
 from keras.layers import Dense
+from sklearn.preprocessing import normalize
+
+xnorm = normalize(x, axis=1, norm='l1')
+ynorm = normalize(np.transpose(y), axis=1, norm='l1')
 
 model = Sequential()
-model.add(Dense(84, input_dim=43, activation='relu'))
-model.add(Dense(84, activation='relu'))
-model.add(Dense(9, activation='sigmoid'))
+model.add(Dense(43, input_dim=43, activation='sigmoid'))
+model.add(Dense(44, activation='sigmoid'))
+model.add(Dense(9, activation='linear'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(x, np.transpose(y), epochs=500, batch_size=50)
+model.fit(xnorm, ynorm, epochs=500, batch_size=50)
 
-scores = model.evaluate(x, y)
+scores = model.evaluate(xnorm, ynorm)
 print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 # row1 = sheet.row(3)
 # cell_type_str = ctype_text.get(cell_obj.ctype, 'unknown type')
