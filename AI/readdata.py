@@ -20,8 +20,8 @@ class processData:
 	startYear = 2009
 	startMonth = 2
 	startDate = 28
-	monthname = ["jan", "feb", "mars", "apr", "maj", "juni", "juli", "aug", "sept", "okt", "nov", "dec"]
-	monthtomonth = {"Januari" : "jan", "Februari" : "feb", "Mars" : "mars", "April": "apr", "Maj" : "maj", "Juni" : "juni", "Juli" : "juli", "Augusti" : "aug", "September" : "sept", "Oktober" : "okt", "November" : "nov", "December" : "dec"}
+	monthname = ["jan", "feb", "mars", "apr", "maj", "juni", "juli", "aug", "sep", "okt", "nov", "dec"]
+	monthtomonth = {"spet" : "sep", "pub" : "ej publicerad" ,"jan" : "jan", "feb" : "feb", "mars" : "mars", "apr" : "apr", "maj" : "maj", "juni" : "juni", "juli" : "juli", "aug" : "aug", "sep" : "sep", "okt" : "okt", "nov" : "nov", "dec" : "dec", "sept" : "sep", "april": "apr", "Januari" : "jan", "Februari" : "feb", "Mars" : "mars", "April": "apr", "Maj" : "maj", "Juni" : "juni", "Juli" : "juli", "Augusti" : "aug", "September" : "sept", "Oktober" : "okt", "November" : "nov", "December" : "dec"}
 
 	def readData(self):
 		for i in range(0, 22):
@@ -71,7 +71,7 @@ class processData:
 
 		# return (startDate, monthname[startMonth-1])
 
-	def printData(self):
+	def printDataDate(self):
 		flag = True
 
 		for i in range(0, len(self.data[16])):
@@ -81,18 +81,53 @@ class processData:
 			if str(self.data[16][i]) == "":
 				print(str(self.data[0][i]) + " " + self.monthtomonth[str(self.data[1][i])])
 			elif not isinstance(self.data[16][i], Number):
-				print(self.data[16][i])
+				str1 = self.data[16][i].split(" ")
+				print(str(str1[0]) + " " + self.monthtomonth[str(str1[1]).lower()])
 			else:
 				self.numberToDate(int(self.data[16][i]))
-				print(str(self.startDate) + " " + str(self.monthname[self.startMonth-1])) 
+				print(str(int(self.startDate)) + " " + str(self.monthname[self.startMonth-1])) 
+
+	def distancedate(self, year, month):
+		tempyear = 2018 - year
+		tempmonth = 9 - self.monthname.index(month)
+
+		return tempyear*12 + tempmonth
 
 
+	def returnData(self):
+
+		data = []
+
+		#For now we ignore which company who did the study
+		for i in range(0, len(self.data[16])):
+			x.append([])
+			x[i].append(int(self.date[0][i]))
+			x[i].append(self.monthtomonth(str(self.date[1][i])))
+			x[i].append(self.date[3][i])
+			x[i].append(float(self.date[0][i]))
+
+
+
+			#date
+			flag = True
+			for i in range(0, len(self.data[16])):
+				if isinstance(self.data[16][i], Number) and flag:
+					flag = False
+					self.sepdate = int(self.data[16][i])
+				if str(self.data[16][i]) == "":
+					print(str(self.data[0][i]) + " " + self.monthtomonth[str(self.data[1][i])])
+				elif not isinstance(self.data[16][i], Number):
+					str1 = self.data[16][i].split(" ")
+					print(str(str1[0]) + " " + self.monthtomonth[str(str1[1]).lower()])
+				else:
+					self.numberToDate(int(self.data[16][i]))
+					print(str(int(self.startDate)) + " " + str(self.monthname[self.startMonth-1])) 
 
 
 datafile = processData()
 
 datafile.readData()
-datafile.printData()
+datafile.printDataDate()
 
 
 
