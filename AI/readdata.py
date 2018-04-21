@@ -244,16 +244,36 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
 from sklearn.preprocessing import normalize
-
+from keras.layers import Embedding
+from keras.layers import LSTM
+from keras.layers import Dropout
+from keras.layers import Activation
 
 xforkeras = np.array(xtraining)
 yforkeras = np.array(ytraining)
 print(len(x[0]))
 
+# model = Sequential()
+# model.add(Dense(80, input_dim=12, activation='tanh'))
+# model.add(Dense(80, activation='tanh'))
+# model.add(Dense(9, activation='linear'))
+# model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+
+# model.fit(xforkeras, yforkeras, epochs=650, batch_size=50)
+# scores = model.evaluate(xforkeras, yforkeras)
+# print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+dropout = 0.25
+neurons = 200
+print(str(xforkeras.shape[0]) + " " + str(xforkeras.shape[1]))
 model = Sequential()
-model.add(Dense(36, input_dim=12, activation='tanh'))
-model.add(Dense(36, activation='tanh'))
-model.add(Dense(9, activation='linear'))
+model.add(LSTM(neurons, return_sequences=True, input_shape=(12, 902), activation="tanh"))
+model.add(Dropout(dropout))
+model.add(LSTM(neurons, return_sequences=True, activation="tanh"))
+model.add(Dropout(dropout))
+model.add(LSTM(neurons, activation="tanh"))
+model.add(Dropout(dropout))
+model.add(Dense(units=9))
+model.add(Activation("linear"))
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
 model.fit(xforkeras, yforkeras, epochs=650, batch_size=50)
